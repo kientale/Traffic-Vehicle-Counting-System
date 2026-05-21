@@ -1,0 +1,89 @@
+# ============================================================
+# DETECTION CONFIG
+# Cấu hình cho bước phát hiện phương tiện bằng Ultralytics YOLO
+# ============================================================
+
+# Đường dẫn model YOLO dùng để detect
+model:
+  name: "yolo11n"
+  path: "models/yolo/yolo11n.pt"
+
+# Thiết bị chạy model
+# auto: tự chọn GPU nếu có, nếu không thì dùng CPU
+# cuda:0: dùng GPU đầu tiên
+# cpu: chạy bằng CPU
+device: "auto"
+
+# Kích thước ảnh đầu vào khi đưa vào YOLO
+# 640: nhanh hơn
+# 960 hoặc 1280: tốt hơn cho xe nhỏ nhưng chậm hơn
+image_size: 1280
+
+# Ngưỡng confidence
+# Giảm giá trị này giúp phát hiện được nhiều xe hơn,
+# nhưng có thể tăng false positive.
+confidence_threshold: 0.25
+
+# Ngưỡng IoU dùng trong Non-Maximum Suppression
+# Điều chỉnh giá trị này ảnh hưởng đến việc loại bỏ box bị trùng.
+iou_threshold: 0.45
+
+# Chỉ giữ lại các class phương tiện cần quan tâm
+# Theo class id của COCO dataset:
+# car        = 2
+# motorcycle = 3
+# bus        = 5
+# truck      = 7
+classes:
+  car:
+    id: 2
+    enabled: true
+
+  motorcycle:
+    id: 3
+    enabled: true
+
+  bus:
+    id: 5
+    enabled: true
+
+  truck:
+    id: 7
+    enabled: true
+
+# Danh sách class id được dùng khi gọi YOLO
+# Có thể dùng trực tiếp trong code:
+# model.predict(..., classes=[2, 3, 5, 7])
+vehicle_class_ids: [2, 3, 5, 7]
+
+# Có bật chế độ lưu kết quả detect hay không
+save:
+  enabled: true
+  output_dir: "outputs/images"
+
+# Có hiển thị kết quả detect trong lúc chạy không
+display:
+  show_window: false
+  draw_bounding_box: true
+  draw_label: true
+  draw_confidence: true
+
+# Cấu hình vùng quan tâm ROI
+# Nếu enabled = false thì xử lý toàn bộ khung hình
+# Nếu enabled = true thì chỉ detect trong vùng được chỉ định
+roi:
+  enabled: false
+
+  # Dạng polygon: danh sách các điểm [x, y]
+  # Ví dụ dưới đây chỉ là mẫu, cần chỉnh theo từng videos thực tế
+  polygon:
+    - [0, 300]
+    - [1280, 300]
+    - [1280, 720]
+    - [0, 720]
+
+# Cấu hình debug
+debug:
+  enabled: true
+  save_failed_frames: true
+  failed_frames_dir: "outputs/frames/detection_errors"

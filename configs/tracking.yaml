@@ -1,0 +1,68 @@
+# ============================================================
+# TRACKING CONFIG
+# Cấu hình cho bước theo dõi phương tiện bằng ByteTrack
+# ============================================================
+
+# Loại tracker sử dụng
+# Ultralytics hỗ trợ: bytetrack, botsort
+tracker_type: bytetrack
+
+# Ngưỡng confidence cao để tracker ưu tiên dùng detection tốt
+# Detection có score >= track_high_thresh sẽ được dùng trước.
+track_high_thresh: 0.5
+
+# Ngưỡng confidence thấp
+# ByteTrack có thể tận dụng cả detection điểm thấp để giữ track.
+# Điều này hữu ích khi xe bị che khuất hoặc detection không ổn định.
+track_low_thresh: 0.1
+
+# Ngưỡng để tạo track mới
+# Detection có score đủ cao mới được tạo thành object mới.
+new_track_thresh: 0.6
+
+# Số frame tracker giữ lại track khi đối tượng bị mất detection
+# Giá trị cao hơn giúp giảm mất ID khi xe bị che khuất ngắn hạn,
+# nhưng có thể làm tăng track sai nếu quá cao.
+track_buffer: 30
+
+# Ngưỡng matching giữa track cũ và detection mới
+# Giá trị càng cao thì yêu cầu khớp càng chặt.
+match_thresh: 0.8
+
+# Có kết hợp confidence score vào quá trình matching hay không
+fuse_score: true
+
+# ============================================================
+# APPLICATION CONFIG
+# Phần này dùng cho code nội bộ của dự án
+# Không bắt buộc với Ultralytics, nhưng hữu ích cho pipeline riêng
+# ============================================================
+
+tracking:
+  enabled: true
+
+  # Có lưu lịch sử vị trí của từng track_id không
+  save_track_history: true
+
+  # Số điểm lịch sử tối đa lưu cho mỗi phương tiện
+  max_history_length: 50
+
+  # Điểm đại diện của bounding box dùng để tracking/counting
+  # center: tâm bounding box
+  # bottom_center: điểm giữa cạnh dưới bounding box
+  anchor_point: "bottom_center"
+
+  # Có vẽ track id lên videos output không
+  draw_track_id: true
+
+  # Có vẽ đường di chuyển của phương tiện không
+  draw_trajectory: true
+
+  # Độ dài đường quỹ đạo hiển thị
+  trajectory_length: 30
+
+# Debug tracking
+debug:
+  enabled: true
+  save_tracking_errors: true
+  tracking_errors_dir: "outputs/frames/tracking_errors"

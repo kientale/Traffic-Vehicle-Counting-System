@@ -1,0 +1,138 @@
+# ============================================================
+# COUNTING CONFIG
+# Cấu hình cho bước đếm phương tiện qua vạch
+# ============================================================
+
+# Bật/tắt chức năng đếm
+enabled: true
+
+# Kiểu đếm
+# line: đếm khi phương tiện đi qua một vạch
+# region: đếm khi phương tiện đi vào một vùng
+counting_type: "region"
+
+# Điểm đại diện của phương tiện dùng để kiểm tra cắt vạch
+# center: tâm bounding box
+# bottom_center: điểm giữa cạnh dưới bounding box
+# bottom_center thường phù hợp hơn với bài toán đếm xe.
+anchor_point: "bottom_center"
+
+# Mỗi track_id chỉ được đếm một lần
+count_once_per_track: true
+
+# Có đếm theo từng loại phương tiện không
+count_by_class: true
+
+# Danh sách class được phép đếm
+allowed_classes:
+  - "car"
+  - "motorcycle"
+  - "bus"
+  - "truck"
+
+# ============================================================
+# LINE COUNTING CONFIG
+# Cấu hình vạch đếm
+# ============================================================
+
+line_counting:
+  enabled: false
+
+  # Có thể khai báo nhiều vạch đếm nếu cần
+  lines:
+    - id: "main_line"
+      name: "Main counting line"
+
+      # Tọa độ điểm đầu và điểm cuối của vạch đếm
+      # Cần chỉnh lại theo độ phân giải và góc camera thực tế
+      start_point: [100, 400]
+      end_point: [900, 400]
+
+      # Hướng đếm
+      # both: đếm cả hai chiều
+      # top_to_bottom: chỉ đếm từ trên xuống dưới
+      # bottom_to_top: chỉ đếm từ dưới lên trên
+      # left_to_right: chỉ đếm từ trái sang phải
+      # right_to_left: chỉ đếm từ phải sang trái
+      direction: "both"
+
+      # Có bật vạch này không
+      enabled: true
+
+# ============================================================
+# REGION COUNTING CONFIG
+# Chỉ dùng nếu counting_type = "region"
+# ============================================================
+
+region_counting:
+  enabled: true
+
+  regions:
+    - id: "main_region"
+      name: "Main counting region"
+
+      # Vùng polygon cần đếm
+      polygon:
+        - [911, 1142]
+        - [1669, 864]
+        - [1969, 1080]
+        - [1035, 1402]
+
+      # Đếm khi phương tiện đi vào vùng
+      count_when: "enter"
+
+      enabled: true
+
+# ============================================================
+# DUPLICATE COUNTING CONTROL
+# Cấu hình tránh đếm trùng
+# ============================================================
+
+duplicate_control:
+  enabled: true
+
+  # Khoảng cách frame tối thiểu giữa hai lần đếm cùng một track
+  # Nếu count_once_per_track = true thì giá trị này ít quan trọng hơn.
+  min_frame_gap: 10
+
+  # Nếu object dao động gần vạch, chỉ đếm khi nó thực sự đổi phía qua vạch
+  require_side_change: true
+
+  # Có lưu danh sách track_id đã đếm không
+  remember_counted_tracks: true
+
+# ============================================================
+# OUTPUT CONFIG
+# Cấu hình hiển thị kết quả đếm
+# ============================================================
+
+display:
+  draw_counting_line: true
+  draw_counting_region: true
+  draw_total_count: true
+  draw_class_count: true
+
+  # Vị trí hiển thị text thống kê trên videos
+  text_position:
+    x: 30
+    y: 50
+
+# ============================================================
+# RESULT CONFIG
+# Cấu hình lưu kết quả đếm
+# ============================================================
+
+save:
+  enabled: true
+
+  # Lưu kết quả dạng csv để đưa vào báo cáo
+  csv_path: "outputs/reports/counting_result.csv"
+
+  # Lưu kết quả dạng json nếu cần xử lý tiếp bằng code
+  json_path: "outputs/reports/counting_result.json"
+
+# Debug counting
+debug:
+  enabled: true
+  save_counting_events: true
+  counting_events_path: "outputs/logs/counting_events.log"

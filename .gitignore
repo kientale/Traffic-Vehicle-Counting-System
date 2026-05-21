@@ -1,0 +1,30 @@
+# Python cache
+__pycache__/
+*.pyc
+
+# IDE
+.idea/
+.vscode/
+
+# Outputs
+outputs/
+experiments/
+
+# Raw data
+data/raws/images/
+data/raws/videos/
+data/frames/
+
+# Optional: ignore media anywhere
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.jpg
+*.jpeg
+*.png
+*.rar
+
+# OS
+.DS_Store
+Thumbs.db
