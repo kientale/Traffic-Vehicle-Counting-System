@@ -21,7 +21,7 @@ def load_config(path: str | Path) -> dict:
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Detect phương tiện trong ảnh")
-    parser.add_argument("--config", default="configs/config.yaml")
+    parser.add_argument("--config", default="configs/detect.yaml")
     parser.add_argument("--image", required=True)
     parser.add_argument("--output", default="outputs/detected.jpg")
     return parser.parse_args()
@@ -32,7 +32,7 @@ def main():
     config = load_config(PROJECT_ROOT / args.config)
 
     detector = YOLODetector(
-        model_path=PROJECT_ROOT / config["model"]["yolo_path"],
+        model_path=PROJECT_ROOT / config["model"]["path"],
         device=config["model"].get("device"),
         allowed_classes=config.get("classes"),
     )

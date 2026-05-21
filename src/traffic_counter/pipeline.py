@@ -38,12 +38,14 @@ class TrafficPipeline:
         self.counter = counter
         self.segmenter = segmenter
         self.predict_config = predict_config or {}
+        self.should_stop = False
 
     def process_image(
         self,
         image_path: str | Path,
         output_path: str | Path,
         use_segmentation: bool = False,
+        frame_callback=None,
     ) -> list[dict]:
         image = read_image(image_path)
         detections = self.detector.detect(image, **self.predict_config)
@@ -56,6 +58,10 @@ class TrafficPipeline:
 
         vis = draw_detections(vis, detections)
         save_image(output_path, vis)
+        
+        if frame_callback:
+            frame_callback(vis)
+            
         return detections
 
     def process_video(
@@ -66,6 +72,7 @@ class TrafficPipeline:
         display: bool = False,
         frame_skip: int = 0,
         max_frames: Optional[int] = None,
+        frame_callback=None,
     ) -> dict:
         cap = open_video(video_path)
         info = get_video_info(cap)
@@ -77,6 +84,9 @@ class TrafficPipeline:
 
         try:
             while True:
+                if self.should_stop:
+                    break
+
                 ok, frame = cap.read()
                 if not ok:
                     break
@@ -122,6 +132,9 @@ class TrafficPipeline:
                     cv2.imshow("Traffic Counter", vis)
                     if cv2.waitKey(1) & 0xFF == ord("q"):
                         break
+
+                if frame_callback:
+                    frame_callback(vis)
 
         finally:
             cap.release()

@@ -84,7 +84,7 @@ def draw_counting_region(
     return out
 
 
-def draw_count_panel(image, counts: dict, origin: tuple[int, int] = (20, 35)):
+def draw_count_panel(image, counts: dict, origin: tuple[int, int] = (30, 60)):
     out = image.copy()
     x, y = origin
     lines = [f"Total: {counts.get('total', 0)}"]
@@ -101,12 +101,23 @@ def draw_count_panel(image, counts: dict, origin: tuple[int, int] = (20, 35)):
     for event_type, value in by_event.items():
         lines.append(f"{event_type}: {value}")
 
-    width = 280
-    height = 35 + 28 * len(lines)
-    cv2.rectangle(out, (x - 10, y - 25), (x + width, y + height), (0, 0, 0), -1)
+    font_scale = 1.6
+    thickness = 3
+    line_spacing = 50
+
+    # Calculate required width dynamically
+    max_text_width = 0
+    for text in lines:
+        (tw, _), _ = cv2.getTextSize(text, cv2.FONT_HERSHEY_SIMPLEX, font_scale, thickness)
+        if tw > max_text_width:
+            max_text_width = tw
+            
+    width = max_text_width + 40
+    height = 20 + line_spacing * len(lines)
+    cv2.rectangle(out, (x - 20, y - 40), (x + width, y + height - 40), (0, 0, 0), -1)
 
     for idx, text in enumerate(lines):
-        yy = y + idx * 28
-        cv2.putText(out, text, (x, yy), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 255), 2)
+        yy = y + idx * line_spacing
+        cv2.putText(out, text, (x, yy), cv2.FONT_HERSHEY_SIMPLEX, font_scale, (255, 255, 255), thickness)
 
     return out

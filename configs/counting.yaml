@@ -73,10 +73,11 @@ region_counting:
 
       # Vùng polygon cần đếm
       polygon:
-        - [911, 1142]
-        - [1669, 864]
-        - [1969, 1080]
-        - [1035, 1402]
+        - [14, 1173]
+        - [2153, 1143]
+        - [2158, 2133]
+        - [14, 2171]
+        - [2, 1177]
 
       # Đếm khi phương tiện đi vào vùng
       count_when: "enter"

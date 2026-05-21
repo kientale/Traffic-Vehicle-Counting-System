@@ -15,9 +15,9 @@ model:
 device: "auto"
 
 # Kích thước ảnh đầu vào khi đưa vào YOLO
-# 640: nhanh hơn
-# 960 hoặc 1280: tốt hơn cho xe nhỏ nhưng chậm hơn
-image_size: 1280
+# 640: nhanh hơn (Rất mượt mà trên máy tính cá nhân)
+# 960 hoặc 1280: tốt hơn cho xe nhỏ nhưng cực kỳ chậm
+image_size: 640
 
 # Ngưỡng confidence
 # Giảm giá trị này giúp phát hiện được nhiều xe hơn,
